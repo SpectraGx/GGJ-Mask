@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 774902277}
   - component: {fileID: 774902276}
   - component: {fileID: 774902280}
+  - component: {fileID: 774902281}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -471,6 +472,24 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &774902281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774902275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa649c423c42ccf46a1a35269d291d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMask: 0
+  cubeRenderer: {fileID: 774902277}
+  noneMaterial: {fileID: 2100000, guid: dc9a80ebda62a614e8dd690ac5f9dd0b, type: 2}
+  fireWallMaterial: {fileID: 2100000, guid: 90217bd09bc5c2641a9370b7952ee4ad, type: 2}
+  adminMaterial: {fileID: 2100000, guid: f50ecb1c5eb08df47ac5dfd8e891e095, type: 2}
+  guestMaterial: {fileID: 2100000, guid: 7d7fba3f3e5570147a4c02f7c9957805, type: 2}
 --- !u!1 &914573534
 GameObject:
   m_ObjectHideFlags: 3

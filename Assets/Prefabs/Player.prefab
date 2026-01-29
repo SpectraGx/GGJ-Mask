@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9158770669204403897}
   - component: {fileID: 1650604569430599081}
   - component: {fileID: 9066181080945995413}
+  - component: {fileID: 5425110867289571090}
   - component: {fileID: 6347849708329357418}
   m_Layer: 0
   m_Name: Player
@@ -120,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b343c382c3b4cc47806e0ef27e684ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 450
+  moveSpeed: 600
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -142,6 +143,19 @@ MonoBehaviour:
   fireWallMaterial: {fileID: 2100000, guid: 90217bd09bc5c2641a9370b7952ee4ad, type: 2}
   adminMaterial: {fileID: 2100000, guid: f50ecb1c5eb08df47ac5dfd8e891e095, type: 2}
   guestMaterial: {fileID: 2100000, guid: 7d7fba3f3e5570147a4c02f7c9957805, type: 2}
+--- !u!114 &5425110867289571090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6590626620013520725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ea35abea176c2642b9575ea9f132447, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLives: 3
 --- !u!54 &6347849708329357418
 Rigidbody:
   m_ObjectHideFlags: 0

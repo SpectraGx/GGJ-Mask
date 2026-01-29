@@ -8,6 +8,12 @@ public class RollingMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] LayerMask obstacleLayer;
     private bool isMoving = false;
+    private PlayerMaskManager maskManager;
+
+    void Start()
+    {
+        maskManager = GetComponent<PlayerMaskManager>();
+    }
 
     void Update()
     {
@@ -30,11 +36,33 @@ public class RollingMovement : MonoBehaviour
     bool IsBlocked(Vector3 direction)
     {
 
-        if (Physics.Raycast(transform.position, direction, out RaycastHit hit, 1f, obstacleLayer))
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, direction, out hit, 1f))
         {
-            Debug.DrawRay(transform.position, direction * 1f, Color.red, 1f);
-            Debug.Log("Blocked by " + hit.collider.name);
-            return true;
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+            {
+                Debug.Log("Blocked by obstacle");
+                return true;
+            }
+
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Gate"))
+            {
+                SecurityGate gate = hit.collider.GetComponent<SecurityGate>();
+                if (gate != null)
+                {
+                    if (gate.CanPass(maskManager.currentMask))
+                    {
+                        Debug.Log("Acceso Concecido");
+                        return false;
+                    }
+                    else
+                    {
+                        Debug.Log("Acceso Denegado");
+                        return true;
+                    }
+                }
+            }
         }
         Debug.DrawRay(transform.position, direction * 1f, Color.green, 1f);
         return false;

@@ -17,6 +17,8 @@ public class RollingMovement : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.instance.currentState != GameState.Roaming) return;
+
         if (isMoving) return;
 
         if (Input.GetKeyDown(KeyCode.W)) TryMove(Vector3.forward);

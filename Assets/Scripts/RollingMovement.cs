@@ -6,19 +6,69 @@ using UnityEngine.InputSystem;
 public class RollingMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] LayerMask obstacleLayer;
     private bool isMoving = false;
+    private PlayerMaskManager maskManager;
+
+    void Start()
+    {
+        maskManager = GetComponent<PlayerMaskManager>();
+    }
 
     void Update()
     {
         if (isMoving) return;
 
-        if (Input.GetKeyDown(KeyCode.W)) StartCoroutine(Move(Vector3.forward));
-        else if (Input.GetKeyDown(KeyCode.S)) StartCoroutine(Move(Vector3.back));
-        else if (Input.GetKeyDown(KeyCode.A)) StartCoroutine(Move(Vector3.left));
-        else if (Input.GetKeyDown(KeyCode.D)) StartCoroutine(Move(Vector3.right));
+        if (Input.GetKeyDown(KeyCode.W)) TryMove(Vector3.forward);
+        else if (Input.GetKeyDown(KeyCode.S)) TryMove(Vector3.back);
+        else if (Input.GetKeyDown(KeyCode.A)) TryMove(Vector3.left);
+        else if (Input.GetKeyDown(KeyCode.D)) TryMove(Vector3.right);
     }
 
-    IEnumerator Move (Vector3 direction)
+    void TryMove(Vector3 direction)
+    {
+        if (!IsBlocked(direction))
+        {
+            StartCoroutine(Move(direction));
+        }
+    }
+
+    bool IsBlocked(Vector3 direction)
+    {
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, direction, out hit, 1f))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+            {
+                Debug.Log("Blocked by obstacle");
+                return true;
+            }
+
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Gate"))
+            {
+                SecurityGate gate = hit.collider.GetComponent<SecurityGate>();
+                if (gate != null)
+                {
+                    if (gate.CanPass(maskManager.currentMask))
+                    {
+                        Debug.Log("Acceso Concecido");
+                        return false;
+                    }
+                    else
+                    {
+                        Debug.Log("Acceso Denegado");
+                        return true;
+                    }
+                }
+            }
+        }
+        Debug.DrawRay(transform.position, direction * 1f, Color.green, 1f);
+        return false;
+    }
+
+    IEnumerator Move(Vector3 direction)
     {
         isMoving = true;
 
@@ -35,7 +85,18 @@ public class RollingMovement : MonoBehaviour
             remainingAngle -= angleToRotate;
             yield return null;
         }
-        
+
+        RoundPosition();
+
         isMoving = false;
+    }
+
+    void RoundPosition()
+    {
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Round(pos.x);
+        pos.y = 0.5f;
+        pos.z = Mathf.Round(pos.z);
+        transform.position = pos;
     }
 }

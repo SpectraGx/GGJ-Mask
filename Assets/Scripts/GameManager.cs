@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
         currentState = newState;
         Debug.Log("Game State changed to: " + newState.ToString());
 
-        if (newState == GameState.Roaming) Cursor.visible = true;
-        else Cursor.visible = false;
+        if (newState == GameState.Roaming) Cursor.visible = false;
+        else Cursor.visible = true;
     }
 }

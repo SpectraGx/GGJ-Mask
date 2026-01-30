@@ -53,7 +53,7 @@ public class TraceManager : MonoBehaviour
 
     public void ModifyTrace(float amount)
     {
-        currentTrace += amount;
+        currentTrace -= amount;
         currentTrace = Mathf.Clamp(currentTrace, 0, maxTrace);
         UpdateTraceUI();
     }

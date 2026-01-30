@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    public enum State { Patrol, Chase, Alerted }
+    public enum State { Patrol, Chase, Alerted, Stunned }
     public State currentState = State.Patrol;
 
     [Header("Patrol Settings")]
@@ -43,6 +43,9 @@ public class EnemyAI : MonoBehaviour
                 break;
             case State.Alerted:
                 AlertedLogic();
+                break;
+            case State.Stunned:
+                // Do nothing while stunned
                 break;
         }
     }
@@ -115,6 +118,32 @@ public class EnemyAI : MonoBehaviour
         Debug.Log("Enemy alerted to location: " + location);
         currentState = State.Alerted;
         agent.SetDestination(location);
+    }
+
+    public void StunEnemy(float duration)
+    {
+        StartCoroutine(StunCoroutine(duration));
+    }
+
+    IEnumerator StunCoroutine(float duration)
+    {
+        agent.isStopped = true;
+
+        agent.ResetPath();
+
+        State previousState = currentState;
+        currentState = State.Stunned;
+
+        Debug.Log("Enemy stunned");
+
+        yield return new WaitForSeconds(duration);
+
+        agent.isStopped = false;
+        currentState = previousState;
+
+        if (currentState == State.Patrol) GoNextPatrolPoint();
+
+        Debug.Log("Enemy recovered from stun");
     }
 
     void OnDrawGizmos()

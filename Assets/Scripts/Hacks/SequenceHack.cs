@@ -7,49 +7,73 @@ public class SequenceHack : MonoBehaviour
 {
 
     [Header("Settings Gameplay")]
-
-    [Header("References")]
-    [SerializeField] private List<Image> buttons;
-    [SerializeField] private int sequenceLength = 4;
+    [SerializeField] private int roundsToWin = 3;
+    [SerializeField] private int baseSequenceLength = 4;
     [SerializeField] private float flashSpeed = 0.5f;
 
+
+    [Header("References UI")]
+    [SerializeField] private List<Image> buttons;
+    [SerializeField] private List<Color> buttonColors;
+    [SerializeField] private Color offColor = Color.gray;
+
+
+    [Header("Internal")]
     [SerializeField] private List<int> sequence = new List<int>();
     private int currentIndex = 0;
+    private int currentRound = 0;
     private bool inputAllowed = false;
     private HackMinigameController hackMinigame;
 
     void Start()
     {
         hackMinigame = GetComponentInParent<HackMinigameController>();
+        ResetButtonVisuals();
     }
 
     void OnEnable()
     {
+        ResetMinigame();
+    }
+
+    void OnDisable()
+    {
+        StopAllCoroutines();
+        ResetButtonVisuals();
+    }
+
+    void ResetMinigame()
+    {
+        currentRound = 0;
+        sequence.Clear();
+        currentIndex = 0;
+        inputAllowed = false;
+
+        StopAllCoroutines();
+
         StartCoroutine(PlaySequence());
     }
 
     private IEnumerator PlaySequence()
     {
         inputAllowed = false;
-        sequence.Clear();
-        currentIndex = 0;
-
-        foreach (var btn in buttons) btn.color = Color.gray;
+        SetButtonInteractable(false);
 
         yield return new WaitForSeconds(0.5f);
 
-        for (int i = 0; i < sequenceLength; i++)
+        int currentLength = baseSequenceLength + currentRound;
+
+        for (int i = 0; i < currentLength; i++)
         {
             int randomIndex = Random.Range(0, buttons.Count);
             sequence.Add(randomIndex);
 
-            buttons[randomIndex].color = Color.white;
-            yield return new WaitForSeconds(flashSpeed);
-            buttons[randomIndex].color = Color.gray;
+            yield return StartCoroutine(HandleInput(randomIndex));
             yield return new WaitForSeconds(0.2f);
         }
 
         inputAllowed = true;
+        SetButtonInteractable(true);
         Debug.Log("Ingresa la secuencia ahora.");
     }
 
@@ -64,23 +88,58 @@ public class SequenceHack : MonoBehaviour
             currentIndex++;
             if (currentIndex >= sequence.Count)
             {
-                Debug.Log("Secuencia correcta! Hack completado.");
-                inputAllowed = false;
-                hackMinigame.CompleteHacking();
+                currentRound++;
+                if (currentRound >= roundsToWin)
+                {
+                    Debug.Log("Secuencia correcta! Hack completado.");
+                    inputAllowed = false;
+                    hackMinigame.CompleteHacking();
+                }
+                else
+                {
+                    Debug.Log("Ronda completada. Siguiente ronda.");
+                    StopAllCoroutines();
+                    ResetButtonVisuals();
+                    StartCoroutine(PlaySequence());
+                }
             }
         }
         else
         {
             Debug.Log("Secuencia incorrecta! Intenta de nuevo.");
             TraceManager.Instance.ModifyTrace(10);
+            StopAllCoroutines();
+            ResetButtonVisuals();
             StartCoroutine(PlaySequence());
         }
     }
 
     IEnumerator HandleInput(int buttonIndex)
     {
-        buttons[buttonIndex].color = Color.white;
-        yield return new WaitForSeconds(0.1f);
-        buttons[buttonIndex].color = Color.gray;
+        Color targetColor = (buttonIndex < buttonColors.Count) ? buttonColors[buttonIndex] : Color.white;
+        buttons[buttonIndex].color = targetColor;
+
+        yield return new WaitForSeconds(flashSpeed);
+        buttons[buttonIndex].color = offColor;
+    }
+
+    void ResetButtonVisuals()
+    {
+        foreach (var btn in buttons)
+        {
+            btn.color = offColor;
+        }
+    }
+
+    void SetButtonInteractable(bool state)
+    {
+        foreach (var btn in buttons)
+        {
+            var btnComponent = btn.GetComponent<Button>();
+            if (btnComponent != null)
+            {
+                btnComponent.interactable = state;
+            }
+        }
     }
 }

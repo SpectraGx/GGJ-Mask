@@ -401,14 +401,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9c730b4c31ed194ab535efb5f75eb91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roundsToWin: 3
+  baseSequenceLength: 4
+  flashSpeed: 0.5
   buttons:
   - {fileID: 1468181825}
   - {fileID: 2085665114}
   - {fileID: 1176731187}
   - {fileID: 1494349224}
-  sequenceLength: 4
-  flashSpeed: 0.5
-  sequence: 000000000000000000000000
+  buttonColors:
+  - {r: 0.34901962, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0.32941177, b: 0.03137255, a: 1}
+  - {r: 0.3921569, g: 0.39607847, b: 0, a: 1}
+  - {r: 0, g: 0.08627451, b: 0.29803923, a: 1}
+  offColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  sequence: 
 --- !u!1001 &32527191
 PrefabInstance:
   m_ObjectHideFlags: 0

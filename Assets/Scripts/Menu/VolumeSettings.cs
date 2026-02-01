@@ -25,7 +25,10 @@ public class VolumeSettings : MonoBehaviour
 
     public void SetVolume(float value)
     {
+        Debug.Log($"[VolumeSettings]{parameterName} Input:{value}");
         float dbVolume = Mathf.Log10(Mathf.Clamp(value,0.0001f,1f))*20;
+
+        Debug.Log($"[Volume Settings]{parameterName} set to {dbVolume} db");
 
         audioMixer.SetFloat(parameterName,dbVolume);
 

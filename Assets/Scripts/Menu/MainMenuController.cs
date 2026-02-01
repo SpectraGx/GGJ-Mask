@@ -44,19 +44,24 @@ public class MainMenuController : MonoBehaviour
     {
         if (currentPanel == targetPanel) return;
 
-        if (currentPanel != null)
+        CanvasGroup previousPanel = currentPanel;
+
+        if (previousPanel != null)
         {
-            currentPanel.blocksRaycasts = false;
-            currentPanel.DOFade(0,0.3f).OnComplete(() =>
+            previousPanel.blocksRaycasts = false;
+            previousPanel.DOKill();
+            previousPanel.DOFade(0, 0.3f).OnComplete(() =>
             {
-               currentPanel.gameObject.SetActive(false);
+                previousPanel.gameObject.SetActive(false);
             });
         }
 
         targetPanel.gameObject.SetActive(true);
         targetPanel.alpha = 0;
-        targetPanel.DOFade(1,0.3f);
         targetPanel.blocksRaycasts = true;
+
+        targetPanel.DOKill();
+        targetPanel.DOFade(1, 0.3f);
 
         currentPanel = targetPanel;
     }

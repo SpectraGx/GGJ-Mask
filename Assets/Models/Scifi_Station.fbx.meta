@@ -3,7 +3,32 @@ guid: b6ab10740500e634f89e82ce70354208
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ESTACION
+    second: {fileID: 2100000, guid: 75574b7451eddcf489144a35b4201f86, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Material.003_BaseColor
+    second: {fileID: 2800000, guid: 3de7060ae3382e740be79c6cd8ef505d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Material.003_Metallic
+    second: {fileID: 2800000, guid: 382ebc82288413349aef81075694e5a3, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Material.003_Normal
+    second: {fileID: 2800000, guid: b972188b35b9d384c9bc1495efb521d2, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Material.003_Roughness
+    second: {fileID: 2800000, guid: 77bd6992a5acaa74b9a8cbfdf71e9ec2, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

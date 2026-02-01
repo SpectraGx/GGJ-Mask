@@ -23,16 +23,21 @@ public class PlayerMaskManager : MonoBehaviour
     [SerializeField] private Color adminColor;
     [SerializeField] private Color guestColor;
 
+    [Header("Mask Bool")]
+    public bool hasFireWallMask = false;
+    public bool hasAdminMask = false;
+    public bool hasGuestMask = false;
+
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) EquipMask(MaskType.FireWall);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) EquipMask(MaskType.Admin);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) EquipMask(MaskType.Guest);
-        if (Input.GetKeyDown(KeyCode.Alpha0)) EquipMask(MaskType.None);
+        if (Input.GetKeyDown(KeyCode.Alpha1) && hasFireWallMask) EquipMask(MaskType.FireWall);
+        if (Input.GetKeyDown(KeyCode.Alpha2) && hasAdminMask) EquipMask(MaskType.Admin);
+        if (Input.GetKeyDown(KeyCode.Alpha3) && hasGuestMask) EquipMask(MaskType.Guest);
+        if (Input.GetKeyDown(KeyCode.R)) EquipMask(MaskType.None);
     }
 
-    void EquipMask(MaskType type)
+    public void EquipMask(MaskType type)
     {
         currentMask = type;
         switch (type)

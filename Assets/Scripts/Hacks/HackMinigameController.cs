@@ -8,6 +8,6 @@ public class HackMinigameController : MonoBehaviour
     {
         gameObject.SetActive(false);
         GameManager.instance.SetGameState(GameState.Roaming);
-        Debug.Log("Hacking Completed");
+        Debug.Log("Hacking Completed. Minigame closed.");
     }
 }

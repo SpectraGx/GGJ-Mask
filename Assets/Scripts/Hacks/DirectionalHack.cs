@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum HackDirection { Up, Down, Left,Right}
 
@@ -18,6 +19,11 @@ public class DirectionalHack : MonoBehaviour
     [SerializeField] private Color correctColor = Color.green;
     [SerializeField] private Color wrongColor = Color.red;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip writeSound;
+    [SerializeField] private AudioClip successSound;
+    [SerializeField] private AudioClip failSound;
+
     [Header("Internal")]
     private List<HackDirection> targetSequence;
     private int currentIndex = 0;
@@ -25,14 +31,18 @@ public class DirectionalHack : MonoBehaviour
     private HackMinigameController hackMinigame;
     private List<Image> spawnedArrows = new List<Image>();
 
+    private System.Action onHackedCallback;
+
     void Awake()
     {
         hackMinigame = GetComponentInParent<HackMinigameController>();
     }
 
-    public void SetupHack(List<HackDirection> sequence, bool showArrows)
+    public void SetupHack(List<HackDirection> sequence, bool showArrows, System.Action onHacked)
     {
         targetSequence = sequence;
+        onHackedCallback = onHacked;
+
         currentIndex = 0;
         inputAllowed = true;
 
@@ -81,6 +91,9 @@ public class DirectionalHack : MonoBehaviour
             currentArrowIcon.transform.rotation = GetRotationForDirection(input);
             currentArrowIcon.color = correctColor;
 
+            currentArrowIcon.transform.DOPunchScale(Vector3.one * 0.3f, 0.2f, 10, 1);
+            AudioManager.instance.PlaySFX(writeSound);
+
             currentIndex++;
 
             if (currentIndex >= targetSequence.Count)
@@ -91,6 +104,7 @@ public class DirectionalHack : MonoBehaviour
         else
         {
             spawnedArrows[currentIndex].color = wrongColor;
+            spawnedArrows[currentIndex].transform.DOShakePosition(0.3f,10f);
             FailDoor();
         }
     }
@@ -99,6 +113,11 @@ public class DirectionalHack : MonoBehaviour
     {
         inputAllowed = false;
         Debug.Log("Secuencia correcta! Hack completado.");
+        if (onHackedCallback != null)
+        {
+            onHackedCallback.Invoke();
+        }
+        AudioManager.instance.PlaySFX(successSound);
         hackMinigame.CompleteHacking();
     }
 
@@ -106,21 +125,34 @@ public class DirectionalHack : MonoBehaviour
     {
         Debug.Log("Secuencia incorrecta! Hack fallido.");
         currentIndex = 0;
+        AudioManager.instance.PlaySFX(failSound);
         StartCoroutine(FlashFailEffect());
     }
 
     IEnumerator FlashFailEffect()
     {
         inputAllowed = false;
-        arrowContainer.GetComponent<Image>().color = wrongColor;
+
+        Image containerIMG = arrowContainer.GetComponent<Image>();
+        if (containerIMG != null)
+        {
+            containerIMG.color = wrongColor;
+            arrowContainer.DOShakePosition(0.3f, 10f);
+        }
+        //arrowContainer.GetComponent<Image>().color = wrongColor;
+
         yield return new WaitForSeconds(0.2f);
-        arrowContainer.GetComponent<Image>().color = Color.clear;
+        if (containerIMG != null)
+        {
+            containerIMG.color = Color.clear;
+        }
 
         currentIndex = 0;
 
         for (int i = 0; i < spawnedArrows.Count; i++)
         {
             spawnedArrows[i].color = (spawnedArrows[i].sprite == hiddenSprite) ? Color.gray : normalColor;
+            spawnedArrows[i].transform.localScale = Vector3.one;
         }
 
         inputAllowed = true;

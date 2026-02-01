@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using MoreMountains.Feedbacks;
 
 public class DoorTerminal : MonoBehaviour
 {
@@ -10,11 +12,18 @@ public class DoorTerminal : MonoBehaviour
 
     [Header("References")]
     public GameObject doorHackPrefab;
+
+    [Header("Logic & Events")]
+    public UnityEvent onDoorComplete;
+    public MMF_Player openFeedbacks;
+
+    [Header("Internal")]
     private bool playerIsOnTop = false;
+    private bool isHacked = false;
 
     void Update()
     {
-        if (playerIsOnTop && GameManager.instance.currentState == GameState.Roaming)
+        if (playerIsOnTop && !isHacked && GameManager.instance.currentState == GameState.Roaming)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -32,7 +41,7 @@ public class DoorTerminal : MonoBehaviour
 
         if (hackScript != null)
         {
-            hackScript.SetupHack(secretCode, showCode);
+            hackScript.SetupHack(secretCode, showCode, UnlockedDoor);
         }
         else
         {
@@ -40,6 +49,14 @@ public class DoorTerminal : MonoBehaviour
         }
 
         Debug.Log("Hacking Started");
+    }
+
+    void UnlockedDoor()
+    {
+        isHacked = true;
+        openFeedbacks?.PlayFeedbacks();
+        onDoorComplete?.Invoke();
+        Debug.Log("Door Unlocked");
     }
 
     void OnTriggerEnter(Collider other)

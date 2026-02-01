@@ -11,9 +11,17 @@ public class HolographicBridge : MonoBehaviour
     [SerializeField] private Transform endPoint;
     [SerializeField] private float animationDuration = 1.5f;
     //[SerializeField] private GameObject bridgeVFX;
+    [SerializeField] private Material brightMaterial;
+
+    void Awake()
+    {
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.material = brightMaterial;
+    }
 
     void Start()
     {
+        lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, startPoint.position);
         lineRenderer.SetPosition(1, startPoint.position);
         lineRenderer.enabled = false;
@@ -21,6 +29,7 @@ public class HolographicBridge : MonoBehaviour
 
     public void ActivateBridge()
     {
+        if (lineRenderer.enabled) return;
         lineRenderer.enabled = true;
         Vector3 finalPos = endPoint.position;
 

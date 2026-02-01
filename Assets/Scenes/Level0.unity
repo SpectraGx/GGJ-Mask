@@ -14486,6 +14486,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 920967014328880160, guid: 69b7215c0aeffee4cae72a4941bf424e,
+        type: 3}
+      propertyPath: lockPassAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8dbc4613f2b32614ab145ae66f5ea071, type: 3}
     - target: {fileID: 1500220699791807163, guid: 69b7215c0aeffee4cae72a4941bf424e,
         type: 3}
       propertyPath: m_Name

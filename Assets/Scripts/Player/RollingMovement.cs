@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public class RollingMovement : MonoBehaviour
 {
@@ -39,6 +40,7 @@ public class RollingMovement : MonoBehaviour
         }
     }
 
+
     bool IsBlocked(Vector3 direction)
     {
 
@@ -57,7 +59,8 @@ public class RollingMovement : MonoBehaviour
                 SecurityGate gate = hit.collider.GetComponent<SecurityGate>();
                 if (gate != null)
                 {
-                    if (gate.CanPass(maskManager.currentMask))
+                    bool CanPass = gate.TryEnter(maskManager);
+                    if (CanPass)
                     {
                         Debug.Log("Acceso Concecido");
                         return false;
@@ -65,13 +68,22 @@ public class RollingMovement : MonoBehaviour
                     else
                     {
                         Debug.Log("Acceso Denegado");
+                        StartCoroutine(BounceEffect(direction));
                         return true;
                     }
                 }
             }
         }
-        Debug.DrawRay(transform.position, direction * 1f, Color.green, 1f);
         return false;
+    }
+
+    IEnumerator BounceEffect(Vector3 direction)
+    {
+        isMoving = true;
+
+        transform.DOPunchPosition(direction * 0.2f, 0.2f, 10, 1f);
+        yield return new WaitForSeconds(0.2f);
+        isMoving = false;
     }
 
     IEnumerator Move(Vector3 direction)

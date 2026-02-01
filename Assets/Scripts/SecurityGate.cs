@@ -5,39 +5,20 @@ using UnityEngine;
 public class SecurityGate : MonoBehaviour
 {
     [SerializeField] private MaskType requiredMask;
-    [SerializeField] private float pushForce = 5f;
+    [SerializeField] private AudioClip lockPassAudioClip;
 
-    void OnCollisionEnter(Collision collision)
+    public bool TryEnter(PlayerMaskManager maskManager)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (maskManager.currentMask == requiredMask)
         {
-            CheckAccess(collision.gameObject);
+            GetComponent<Collider>().isTrigger = true;
+            return true;
         }
-    }
-
-    void CheckAccess(GameObject player)
-    {
-        PlayerMaskManager maskManager = player.GetComponent<PlayerMaskManager>();
-        if (maskManager == null || maskManager.currentMask != requiredMask)
+        else
         {
-            Rigidbody rb = player.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                Vector3 pushDirection = (player.transform.position - transform.position).normalized;
-                pushDirection.y = 0.2f; 
-
-                rb.velocity = Vector3.zero;
-                rb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
-            }
-            else
-            {
-                GetComponent<Collider>().isTrigger = true;
-            }
+            Debug.Log("Gate locked. Required mask: " + requiredMask);
+            AudioManager.instance.PlaySFX(lockPassAudioClip);
+            return false;
         }
-    }
-
-    public bool CanPass(MaskType playerMask)
-    {
-        return playerMask == requiredMask;
     }
 }

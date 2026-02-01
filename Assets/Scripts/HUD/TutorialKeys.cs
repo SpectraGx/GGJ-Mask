@@ -11,6 +11,11 @@ public class TutorialKeys : MonoBehaviour
     [SerializeField] private CanvasGroup a_Key;
     [SerializeField] private CanvasGroup s_Key;
     [SerializeField] private CanvasGroup d_Key;
+    [SerializeField] private CanvasGroup e_Key;
+    [SerializeField] private CanvasGroup one_Key;
+    [SerializeField] private CanvasGroup two_Key;
+    [SerializeField] private CanvasGroup three_Key;
+    [SerializeField] private CanvasGroup r_Key;
 
     [Header("Animations")]
     [SerializeField] private float floatDistance = 0.25f;
@@ -30,6 +35,9 @@ public class TutorialKeys : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A)) FadeOutKey(a_Key);
         if (Input.GetKeyDown(KeyCode.S)) FadeOutKey(s_Key);
         if (Input.GetKeyDown(KeyCode.D)) FadeOutKey(d_Key);
+        if (Input.GetKeyDown(KeyCode.E)) FadeOutKey(e_Key);
+        if (Input.GetKeyDown(KeyCode.Alpha1)) FadeOutKey(one_Key);
+        if (Input.GetKeyDown(KeyCode.R)) FadeOutKey(r_Key);
     }
 
     void AnimateKey(Transform target)

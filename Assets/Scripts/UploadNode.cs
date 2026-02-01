@@ -42,7 +42,8 @@ public class UploadNode : MonoBehaviour
         }
 
         Debug.Log("NIVEL COMPLETADO");
-        SceneManager.LoadScene(sceneToLoad);
+        SceneLoader.Instance.LoadLevel(sceneToLoad);
+        //SceneManager.LoadScene(sceneToLoad);
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

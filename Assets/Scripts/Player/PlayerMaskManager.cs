@@ -28,6 +28,9 @@ public class PlayerMaskManager : MonoBehaviour
     public bool hasAdminMask = false;
     public bool hasGuestMask = false;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip equipMaskAudioClip;
+
 
     void Update()
     {
@@ -40,6 +43,7 @@ public class PlayerMaskManager : MonoBehaviour
     public void EquipMask(MaskType type)
     {
         currentMask = type;
+        AudioManager.instance.PlaySFX(equipMaskAudioClip);
         switch (type)
         {
             case MaskType.None: 

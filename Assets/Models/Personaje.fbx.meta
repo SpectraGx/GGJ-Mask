@@ -3,7 +3,32 @@ guid: f1f22472358f01e45bf21bcf9102c027
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Personaje
+    second: {fileID: 2100000, guid: 3750220ff1f41b94e9ce482f0c3046c0, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Coated Titanium_BaseColor
+    second: {fileID: 2800000, guid: 6989c099d83d42b45815a2664a83c9ce, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Coated Titanium_Metallic
+    second: {fileID: 2800000, guid: f0ea62d947030394fb61771d0c62b021, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Coated Titanium_Normal
+    second: {fileID: 2800000, guid: 825ee7fa106b6694a82956f15e6762a1, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Coated Titanium_Roughness
+    second: {fileID: 2800000, guid: ae3fce1614545ff488e71db051bd2508, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -35,7 +60,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 2
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -90,7 +115,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.02
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

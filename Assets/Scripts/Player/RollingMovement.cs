@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class RollingMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float distanceFloor = 0.5f;
     [SerializeField] LayerMask obstacleLayer;
     private bool isMoving = false;
     private PlayerMaskManager maskManager;
@@ -97,7 +98,7 @@ public class RollingMovement : MonoBehaviour
     {
         Vector3 pos = transform.position;
         pos.x = Mathf.Round(pos.x);
-        pos.y = 0.5f;
+        pos.y = distanceFloor;
         pos.z = Mathf.Round(pos.z);
         transform.position = pos;
     }

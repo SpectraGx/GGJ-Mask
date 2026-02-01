@@ -3,7 +3,12 @@ guid: 76eb4f3eb9cf2d7499c3542f40a37854
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RETICULA
+    second: {fileID: 2100000, guid: 8f236caa708e48b40888ad214387ef4c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

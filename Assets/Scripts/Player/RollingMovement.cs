@@ -11,6 +11,9 @@ public class RollingMovement : MonoBehaviour
     private bool isMoving = false;
     private PlayerMaskManager maskManager;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip rollAudioClip;
+
     void Start()
     {
         maskManager = GetComponent<PlayerMaskManager>();
@@ -88,6 +91,7 @@ public class RollingMovement : MonoBehaviour
             remainingAngle -= angleToRotate;
             yield return null;
         }
+        AudioManager.instance.PlaySFX(rollAudioClip);
 
         RoundPosition();
 
@@ -102,4 +106,5 @@ public class RollingMovement : MonoBehaviour
         pos.z = Mathf.Round(pos.z);
         transform.position = pos;
     }
+
 }

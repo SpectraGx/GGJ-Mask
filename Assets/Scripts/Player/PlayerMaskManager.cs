@@ -18,6 +18,10 @@ public class PlayerMaskManager : MonoBehaviour
 
     [Header("Mask UI")]
     [SerializeField] private Image maskIconUI;
+    [SerializeField] private Sprite noneSprite;
+    [SerializeField] private Sprite fireWallSprite;
+    [SerializeField] private Sprite adminSprite;
+    [SerializeField] private Sprite guestSprite;
     [SerializeField] private Color noneColor;
     [SerializeField] private Color fireWallColor;
     [SerializeField] private Color adminColor;
@@ -48,18 +52,22 @@ public class PlayerMaskManager : MonoBehaviour
         {
             case MaskType.None: 
                 cubeRenderer.material = noneMaterial;
+                maskIconUI.sprite = noneSprite;
                 maskIconUI.color = noneColor; 
                 break;
             case MaskType.FireWall: 
                 cubeRenderer.material = fireWallMaterial; 
+                maskIconUI.sprite = fireWallSprite;
                 maskIconUI.color = fireWallColor;
                 break;
             case MaskType.Admin: 
                 cubeRenderer.material = adminMaterial; 
+                maskIconUI.sprite = adminSprite;
                 maskIconUI.color = adminColor;
                 break;
             case MaskType.Guest: 
                 cubeRenderer.material = guestMaterial; 
+                maskIconUI.sprite = guestSprite;
                 maskIconUI.color = guestColor;
                 break;
         }

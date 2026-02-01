@@ -5437,6 +5437,10 @@ MonoBehaviour:
   adminMaterial: {fileID: 2100000, guid: a290ae0c8d0ee1140875272a3be3ece8, type: 2}
   guestMaterial: {fileID: 2100000, guid: e04c558c5b7d1654c92874b39950aa65, type: 2}
   maskIconUI: {fileID: 1485275573}
+  noneSprite: {fileID: 21300000, guid: 18830254b63acc446bb80d9ab0600bd9, type: 3}
+  fireWallSprite: {fileID: 21300000, guid: 7082cd8aef107be489041ccb7cbafd22, type: 3}
+  adminSprite: {fileID: 21300000, guid: 6c9a661aa01a3a44d80492fb3124398c, type: 3}
+  guestSprite: {fileID: 21300000, guid: 4d4a9e34cc5bf6a4aade7a493ae324a0, type: 3}
   noneColor: {r: 0.16470589, g: 0.91372555, b: 0.91372555, a: 1}
   fireWallColor: {r: 1, g: 0.20392159, b: 0.21176472, a: 1}
   adminColor: {r: 0.16862746, g: 0.21176472, b: 1, a: 1}
@@ -9383,14 +9387,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
+  m_Color: {r: 0.16470589, g: 0.91372555, b: 0.91372555, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 18830254b63acc446bb80d9ab0600bd9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9424,8 +9428,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 100, y: 100}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 125, y: 125}
+  m_SizeDelta: {x: 125, y: 125}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &1488167806
 GameObject:

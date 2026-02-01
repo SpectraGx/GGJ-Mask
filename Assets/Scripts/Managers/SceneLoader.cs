@@ -44,7 +44,7 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator TransitionRoutine(string scene)
     {
-        GameManager.instance.SetGameState(GameState.Win);
+        //GameManager.instance.SetGameState(GameState.Win);
 
         Sequence s = DOTween.Sequence();
 

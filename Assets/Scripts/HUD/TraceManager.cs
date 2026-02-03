@@ -25,7 +25,7 @@ public class TraceManager : MonoBehaviour
     void Awake()
     {
         if (Instance == null) Instance = this;
-        
+
     }
 
     void Start()
@@ -40,7 +40,10 @@ public class TraceManager : MonoBehaviour
 
         if (GameManager.instance.currentState == GameState.GameOver) return;
 
-        currentTrace -= passiveFillRate * Time.deltaTime;
+        if (LevelUIManager.Instance.gameEnded == true)
+        {
+            currentTrace -= passiveFillRate * Time.deltaTime;
+        }
 
         if (currentTrace <= 0)
         {
@@ -75,7 +78,8 @@ public class TraceManager : MonoBehaviour
     {
         isTraceActive = false;
         Debug.Log("System Purge Triggered!");
-        FindObjectOfType<PlayerHealth>().TakeDamage();
+        //FindObjectOfType<PlayerHealth>().TakeDamage();
+        LevelUIManager.Instance.ShowLoseScreen();
     }
 
 }

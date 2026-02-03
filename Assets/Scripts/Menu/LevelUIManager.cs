@@ -15,7 +15,7 @@ public class LevelUIManager : MonoBehaviour
     [SerializeField] private CanvasGroup losePanel;
 
     private bool isPaused = false;
-    private bool gameEnded = false;
+    public bool gameEnded = false;
 
     void Awake()
     {

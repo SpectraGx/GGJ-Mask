@@ -72,7 +72,8 @@ public class PlayerHealth : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("Juego Terminado.");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        LevelUIManager.Instance.ShowLoseScreen();
     }
 
     public void SetCheckPoint(Vector3 newPosition)

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class TimingHack : MonoBehaviour
@@ -15,6 +16,12 @@ public class TimingHack : MonoBehaviour
     [SerializeField] private float rotationSpeed = 200f;
     [SerializeField] private float successAngleTolerance = 0.25f;
     [SerializeField] private int stagesToComplete = 3;
+    public UnityEvent hackTimeCompleted;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip successClip;
+    [SerializeField] private AudioClip failClip;
+
 
     private int currentState = 0;
     private bool isRunning = false;
@@ -48,11 +55,11 @@ public class TimingHack : MonoBehaviour
         float needleAngle = NormalizeAngle(needle.localEulerAngles.z + 180f);
         float zoneStart = NormalizeAngle(currentZoneAngle);
         //float zoneEnd = NormalizeAngle(currentZoneAngle - (targetZone.fillAmount * 360f));
-        float zoneCenter = currentZoneAngle - (targetZone.fillAmount*360f/2f);
+        float zoneCenter = currentZoneAngle - (targetZone.fillAmount * 360f / 2f);
 
         float angleDiff = Mathf.Abs(Mathf.DeltaAngle(needleAngle, zoneCenter));
         float tolerance = (targetZone.fillAmount * 360f) / 2f;
-        
+
         if (angleDiff < tolerance)
         {
             Success();
@@ -69,6 +76,7 @@ public class TimingHack : MonoBehaviour
         currentState++;
         rotationSpeed *= 1.5f;
         rotationSpeed *= -1;
+        AudioManager.instance.PlaySFX(successClip);
 
         if (currentState >= stagesToComplete)
         {
@@ -83,6 +91,7 @@ public class TimingHack : MonoBehaviour
     void Fail()
     {
         Debug.Log("ERROR EN" + currentState);
+        AudioManager.instance.PlaySFX(failClip);
         ResetMinigame();
     }
 
@@ -90,6 +99,7 @@ public class TimingHack : MonoBehaviour
     {
         Debug.Log("Minigame Vencido!");
         hackController.CompleteHacking();
+        hackTimeCompleted?.Invoke();
     }
 
     void NextRound()

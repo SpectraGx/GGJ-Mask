@@ -14,6 +14,10 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float loseRange = 7f;
     [SerializeField] private LayerMask obstacleLayer;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip alertSound;
+    private bool hasPlayerDetected = false;
+
     [Header("References")]
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Transform player;
@@ -23,7 +27,7 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        agent=GetComponent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
 
         if (player == null) { player = GameObject.FindGameObjectWithTag("Player").transform; }
 
@@ -35,6 +39,7 @@ public class EnemyAI : MonoBehaviour
         switch (currentState)
         {
             case State.Patrol:
+                hasPlayerDetected = false;
                 PatrolLogic();
                 CheckForPlayer();
                 break;
@@ -95,8 +100,17 @@ public class EnemyAI : MonoBehaviour
 
     void StartChasing()
     {
-        lastPatrolPosition = transform.position;
-        currentState = State.Chase;
+        if (currentState != State.Chase)
+        {
+            lastPatrolPosition = transform.position;
+            currentState = State.Chase;
+
+            if (!hasPlayerDetected && alertSound != null)
+            {
+                AudioManager.instance.PlaySFX(alertSound);
+                hasPlayerDetected = true;
+            }
+        }
     }
 
     void ReturnToPatrol()

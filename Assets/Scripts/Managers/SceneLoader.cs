@@ -61,6 +61,10 @@ public class SceneLoader : MonoBehaviour
 
         AsyncOperation op = SceneManager.LoadSceneAsync(scene);
         while (!op.isDone) yield return null;
+        if (GameManager.instance!= null)
+        {
+            GameManager.instance.SetGameState(GameState.Roaming);
+        }
 
         CRTTurnOn();
     }

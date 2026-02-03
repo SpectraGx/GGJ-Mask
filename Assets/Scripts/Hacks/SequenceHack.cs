@@ -1,22 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class SequenceHack : MonoBehaviour
 {
-
     [Header("Settings Gameplay")]
     [SerializeField] private int roundsToWin = 3;
     [SerializeField] private int baseSequenceLength = 4;
     [SerializeField] private float flashSpeed = 0.5f;
-
+    [SerializeField] private float dmgTrace = 10f;
 
     [Header("References UI")]
     [SerializeField] private List<Image> buttons;
     [SerializeField] private List<Color> buttonColors;
     [SerializeField] private Color offColor = Color.gray;
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioClip[] colorSounds; 
+    [SerializeField] private AudioClip successClip;
+    [SerializeField] private AudioClip failClip;
 
     [Header("Internal")]
     [SerializeField] private List<int> sequence = new List<int>();
@@ -24,11 +28,22 @@ public class SequenceHack : MonoBehaviour
     private int currentRound = 0;
     private bool inputAllowed = false;
     private HackMinigameController hackMinigame;
+    public UnityEvent onHackCompleted;
 
     void Start()
     {
         hackMinigame = GetComponentInParent<HackMinigameController>();
+
         ResetButtonVisuals();
+        SetupButtonHitbox(); 
+    }
+
+    void SetupButtonHitbox()
+    {
+        foreach (var btn in buttons)
+        {
+            btn.alphaHitTestMinimumThreshold = 0.1f;
+        }
     }
 
     void OnEnable()
@@ -50,7 +65,6 @@ public class SequenceHack : MonoBehaviour
         inputAllowed = false;
 
         StopAllCoroutines();
-
         StartCoroutine(PlaySequence());
     }
 
@@ -65,23 +79,25 @@ public class SequenceHack : MonoBehaviour
 
         for (int i = 0; i < currentLength; i++)
         {
-            int randomIndex = Random.Range(0, buttons.Count);
-            sequence.Add(randomIndex);
+            if (sequence.Count < currentLength)
+            {
+                int randomIndex = Random.Range(0, buttons.Count);
+                sequence.Add(randomIndex);
+            }
 
-            yield return StartCoroutine(HandleInput(randomIndex));
+            yield return StartCoroutine(FlashButton(sequence[i]));
             yield return new WaitForSeconds(0.2f);
         }
 
         inputAllowed = true;
         SetButtonInteractable(true);
-        Debug.Log("Ingresa la secuencia ahora.");
     }
 
     public void OnButtonPressed(int buttonIndex)
     {
         if (!inputAllowed) return;
 
-        StartCoroutine(HandleInput(buttonIndex));
+        StartCoroutine(FlashButton(buttonIndex));
 
         if (buttonIndex == sequence[currentIndex])
         {
@@ -92,32 +108,73 @@ public class SequenceHack : MonoBehaviour
                 if (currentRound >= roundsToWin)
                 {
                     Debug.Log("Secuencia correcta! Hack completado.");
+                    AudioManager.instance.PlaySFX(successClip); 
                     inputAllowed = false;
                     hackMinigame.CompleteHacking();
+                    onHackCompleted?.Invoke();
                 }
                 else
                 {
                     Debug.Log("Ronda completada. Siguiente ronda.");
-                    StopAllCoroutines();
-                    ResetButtonVisuals();
-                    StartCoroutine(PlaySequence());
+                    AudioManager.instance.PlaySFX(successClip); 
+                    inputAllowed = false;
+                    Invoke("StartNextRound", 1f); 
                 }
             }
         }
         else
         {
             Debug.Log("Secuencia incorrecta! Intenta de nuevo.");
-            TraceManager.Instance.ModifyTrace(10);
+            AudioManager.instance.PlaySFX(failClip); 
+
+            if (TraceManager.Instance != null) TraceManager.Instance.ModifyTrace(dmgTrace);
+
+            inputAllowed = false;
+
             StopAllCoroutines();
             ResetButtonVisuals();
-            StartCoroutine(PlaySequence());
+            Invoke("RestartCurrentSequence", 1f);
         }
     }
 
-    IEnumerator HandleInput(int buttonIndex)
+    void StartNextRound()
+    {
+        sequence.Clear(); 
+
+        currentIndex = 0;
+        StartCoroutine(PlaySequence());
+    }
+
+    void RestartCurrentSequence()
+    {
+        currentIndex = 0;
+        StartCoroutine(PlaySequenceReplay());
+    }
+
+    private IEnumerator PlaySequenceReplay()
+    {
+        inputAllowed = false;
+        SetButtonInteractable(false);
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < sequence.Count; i++)
+        {
+            yield return StartCoroutine(FlashButton(sequence[i]));
+            yield return new WaitForSeconds(0.2f);
+        }
+        inputAllowed = true;
+        SetButtonInteractable(true);
+    }
+
+    IEnumerator FlashButton(int buttonIndex)
     {
         Color targetColor = (buttonIndex < buttonColors.Count) ? buttonColors[buttonIndex] : Color.white;
         buttons[buttonIndex].color = targetColor;
+
+        if (buttonIndex < colorSounds.Length && colorSounds[buttonIndex] != null)
+        {
+            AudioManager.instance.PlaySFX(colorSounds[buttonIndex]);
+        }
 
         yield return new WaitForSeconds(flashSpeed);
         buttons[buttonIndex].color = offColor;
